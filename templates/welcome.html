@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h2>Welcome to Yamkela's Tutoring Services!</h2>
+
+  <p>Select your grade level to find tailored tutoring resources and tutoring sessions:</p>
+
+  <!-- 📸 Image of a happy learner -->
+  <img src="{{ url_for('static', filename='images/happy_learner.jpg') }}"
+       alt="Happy Learner"
+       style="max-width: 100%; height: auto; border-radius: 10px; margin: 20px 0; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);" />
+
+  <ul>
+    <li><a href="{{ url_for('grade10') }}">Grade 10</a></li>
+    <li><a href="{{ url_for('grade11') }}">Grade 11</a></li>
+    <li><a href="{{ url_for('grade12') }}">Grade 12</a></li>
+  </ul>
+{% endblock %}

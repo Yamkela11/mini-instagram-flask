@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h2>📅 Book a Tutoring Session</h2>
+
+  <form method="POST" style="max-width: 600px;">
+    <div style="margin-bottom: 15px;">
+      <label for="name">Full Name:</label><br>
+      <input type="text" name="name" id="name" required style="width: 100%; padding: 8px;">
+    </div>
+
+    <div style="margin-bottom: 15px;">
+      <label for="email">Email Address:</label><br>
+      <input type="email" name="email" id="email" required style="width: 100%; padding: 8px;">
+    </div>
+
+    <div style="margin-bottom: 15px;">
+      <label for="subject">Subject:</label><br>
+      <input type="text" name="subject" id="subject" placeholder="e.g. Mathematics, Physics" required style="width: 100%; padding: 8px;">
+    </div>
+
+    <div style="margin-bottom: 15px;">
+      <label for="date">Preferred Date & Time:</label><br>
+      <input type="datetime-local" name="date" id="date" required style="width: 100%; padding: 8px;">
+    </div>
+
+    <button type="submit" style="padding: 10px 20px; background-color: #3498db; color: white; border: none; border-radius: 5px;">
+      Submit Booking
+    </button>
+  </form>
+{% endblock %}

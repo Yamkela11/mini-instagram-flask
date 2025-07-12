@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h2 style="color: #2c3e50;">📤 Upload Study Material</h2>
+
+  <form method="POST" enctype="multipart/form-data" action="{{ url_for('upload') }}" style="max-width: 600px; margin-top: 20px;">
+    
+    <!-- Title -->
+    <label for="title">Title:</label><br>
+    <input type="text" name="title" required style="width: 100%; padding: 8px;"><br><br>
+
+    <!-- Description -->
+    <label for="description">Description (optional):</label><br>
+    <textarea name="description" rows="3" style="width: 100%; padding: 8px;"></textarea><br><br>
+
+    <!-- Grade Dropdown -->
+    <label for="grade">Grade:</label><br>
+    <select name="grade" required style="width: 100%; padding: 8px;">
+      <option value="">Select Grade</option>
+      <option value="Grade 10">Grade 10</option>
+      <option value="Grade 11">Grade 11</option>
+      <option value="Grade 12">Grade 12</option>
+    </select><br><br>
+
+    <!-- Subject Dropdown -->
+    <label for="subject">Subject:</label><br>
+    <select name="subject" required style="width: 100%; padding: 8px;">
+      <option value="">Select Subject</option>
+      <option value="Mathematics">Mathematics</option>
+      <option value="Physical Sciences">Physical Sciences</option>
+      <option value="Life Sciences">Life Sciences</option>
+      <option value="Geography">Geography</option>
+      <option value="Agricultural Sciences">Agricultural Sciences</option>
+    </select><br><br>
+
+    <!-- File Upload -->
+    <label for="file">Choose a file (PDF, Image, or MP4):</label><br>
+    <input type="file" name="file" accept=".pdf,.mp4,.jpg,.jpeg,.png,.gif" required style="width: 100%; padding: 8px;"><br><br>
+
+    <!-- Submit Button -->
+    <button type="submit" style="padding: 10px 20px; background-color: #2980b9; color: white; border: none; border-radius: 5px;">
+      Upload
+    </button>
+  </form>
+{% endblock %}

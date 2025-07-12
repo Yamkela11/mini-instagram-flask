@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h2>Admin Dashboard: Bookings</h2>
+
+  {% if bookings %}
+    <table style="width: 100%; border-collapse: collapse;">
+      <thead>
+        <tr>
+          <th style="border-bottom: 2px solid #ccc; padding: 8px;">Name</th>
+          <th style="border-bottom: 2px solid #ccc; padding: 8px;">Email</th>
+          <th style="border-bottom: 2px solid #ccc; padding: 8px;">Subject</th>
+          <th style="border-bottom: 2px solid #ccc; padding: 8px;">Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for booking in bookings %}
+        <tr>
+          <td style="border-bottom: 1px solid #eee; padding: 8px;">{{ booking.name }}</td>
+          <td style="border-bottom: 1px solid #eee; padding: 8px;">{{ booking.email }}</td>
+          <td style="border-bottom: 1px solid #eee; padding: 8px;">{{ booking.subject }}</td>
+          <td style="border-bottom: 1px solid #eee; padding: 8px;">{{ booking.date }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>No bookings found.</p>
+  {% endif %}
+{% endblock %}

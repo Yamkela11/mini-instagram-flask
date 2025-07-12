@@ -1,0 +1,24 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f2f5;  /* Soft light background */
+    color: #333;                /* Dark gray text for readability */
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;           /* Better line spacing */
+}
+
+h2 {
+    color: #2c3e50;             /* Darker blue-gray for headings */
+    margin-bottom: 1rem;        /* Spacing below headings */
+}
+
+a {
+    color: #2980b9;             /* Bright blue links */
+    text-decoration: none;
+    transition: color 0.3s ease; /* Smooth color transition on hover */
+}
+
+a:hover {
+    text-decoration: underline;
+    color: #1c5980;             /* Slightly darker blue on hover */
+}

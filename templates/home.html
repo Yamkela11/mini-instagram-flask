@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h2>📚 Study Materials</h2>
+
+  {% if materials %}
+    {% for material in materials %}
+      <div style="border: 1px solid #ddd; border-radius: 8px; padding: 15px; margin-bottom: 20px; background-color: #fff;">
+        <p><strong>Uploaded by:</strong> @{{ material.uploader.username }}</p>
+        <p><strong>Title:</strong> {{ material.title }}</p>
+
+        {% if material.filename.endswith('.pdf') %}
+          <p>
+            📄 <a href="{{ url_for('static', filename='uploads/' + material.filename) }}" target="_blank">
+              View PDF
+            </a> |
+            <a href="{{ url_for('static', filename='uploads/' + material.filename) }}" download>
+              Download
+            </a>
+          </p>
+
+        {% elif material.filename.endswith('.mp4') %}
+          <video width="100%" controls style="max-width: 500px; border-radius: 5px;">
+            <source src="{{ url_for('static', filename='uploads/' + material.filename) }}" type="video/mp4">
+            Your browser does not support HTML5 video.
+          </video>
+        {% else %}
+          <a href="{{ url_for('static', filename='uploads/' + material.filename) }}" target="_blank">
+            <img src="{{ url_for('static', filename='uploads/' + material.filename) }}"
+                 alt="{{ material.title }}"
+                 style="width: 100%; max-width: 500px; height: auto; border-radius: 5px;">
+          </a>
+        {% endif %}
+
+        {% if material.description %}
+          <p style="margin-top: 10px;"><em>{{ material.description[:250] }}{% if material.description|length > 250 %}...{% endif %}</em></p>
+        {% endif %}
+      </div>
+    {% endfor %}
+  {% else %}
+    <p>No study materials have been uploaded yet.</p>
+  {% endif %}
+{% endblock %}

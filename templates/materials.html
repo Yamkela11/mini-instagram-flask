@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block head %}
+  {{ super() }}
+  <!-- PDF.js library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.9.179/pdf.min.js"></script>
+{% endblock %}
+
+{% block content %}
+  <h2>📚 Study Materials</h2>
+
+  {% if request.endpoint == 'materials' %}
+    <!-- Filter Form -->
+    <form method="get" action="{{ url_for('materials') }}" style="margin-bottom: 30px;">
+      <label for="grade">Grade:</label>
+      <select name="grade" id="grade">
+        <option value="">All Grades</option>
+        <option value="Grade 10" {% if grade == 'Grade 10' %}selected{% endif %}>Grade 10</option>
+        <option value="Grade 11" {% if grade == 'Grade 11' %}selected{% endif %}>Grade 11</option>
+        <option value="Grade 12" {% if grade == 'Grade 12' %}selected{% endif %}>Grade 12</option>
+      </select>
+
+      <label for="subject" style="margin-left: 10px;">Subject:</label>
+      <select name="subject" id="subject">
+        <option value="">All Subjects</option>
+        <option value="Mathematics" {% if subject == 'Mathematics' %}selected{% endif %}>Mathematics</option>
+        <option value="Physical Sciences" {% if subject == 'Physical Sciences' %}selected{% endif %}>Physical Sciences</option>
+        <option value="Life Sciences" {% if subject == 'Life Sciences' %}selected{% endif %}>Life Sciences</option>
+        <option value="Geography" {% if subject == 'Geography' %}selected{% endif %}>Geography</option>
+        <option value="Agricultural Sciences" {% if subject == 'Agricultural Sciences' %}selected{% endif %}>Agricultural Sciences</option>
+      </select>
+
+      <button type="submit" style="margin-left: 10px;">Filter</button>
+    </form>
+  {% endif %}
+
+  {% if grade and subject %}
+    <p style="font-weight: bold; color: #2980b9;">
+      Showing materials for <span style="text-transform: uppercase;">{{ grade }}</span> - <span style="font-style: italic;">{{ subject }}</span>
+    </p>
+  {% elif grade %}
+    <p style="font-weight: bold; color: #2980b9;">
+      Showing materials for <span style="text-transform: uppercase;">{{ grade }}</span>
+    </p>
+  {% endif %}
+
+  {% if materials %}
+    {% for material in materials %}
+      <div style="border: 1px solid #ddd; border-radius: 8px; padding: 15px; margin-bottom: 20px; box-shadow: 1px 1px 5px rgba(0,0,0,0.05);">
+        <p><strong>Uploaded by @{{ material.uploader.username }}</strong></p>
+        <p><strong>Title:</strong> {{ material.title }}</p>
+        <p><strong>Grade:</strong> {{ material.grade or 'General' }}</p>
+        <p><strong>Subject:</strong> {{ material.subject or 'General' }}</p>
+
+        {% if material.filename.endswith('.pdf') %}
+          <div style="max-width: 600px; border: 1px solid #ccc; border-radius: 5px; margin-bottom: 10px;">
+            <canvas id="pdf-canvas-{{ material.id }}" style="width: 100%; border-radius: 5px;"></canvas>
+            <p><a href="{{ url_for('static', filename='uploads/' + material.filename) }}" target="_blank" style="text-decoration:none; color:#2980b9;">🔗 Open PDF in new tab</a></p>
+          </div>
+
+          <script>
+            document.addEventListener("DOMContentLoaded", function() {
+              const url = "{{ url_for('static', filename='uploads/' + material.filename) }}";
+              const canvas = document.getElementById("pdf-canvas-{{ material.id }}");
+              if (!canvas) return;
+              const context = canvas.getContext("2d");
+
+              pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.9.179/pdf.worker.min.js";
+
+              pdfjsLib.getDocument(url).promise.then(pdfDoc => {
+                pdfDoc.getPage(1).then(page => {
+                  const viewport = page.getViewport({ scale: 1.5 });
+                  canvas.height = viewport.height;
+                  canvas.width = viewport.width;
+
+                  const renderContext = {
+                    canvasContext: context,
+                    viewport: viewport
+                  };
+                  page.render(renderContext);
+                });
+              });
+            });
+          </script>
+
+        {% elif material.filename.endswith('.mp4') %}
+          <video width="100%" controls style="max-width: 400px; border-radius: 5px;">
+            <source src="{{ url_for('static', filename='uploads/' + material.filename) }}" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        {% else %}
+          <img src="{{ url_for('static', filename='uploads/' + material.filename) }}"
+               alt="Study Image"
+               style="width: 100%; max-width: 400px; height: auto; border-radius: 5px;">
+        {% endif %}
+
+        {% if material.description %}
+          <p style="margin-top: 10px;"><em>{{ material.description }}</em></p>
+        {% endif %}
+      </div>
+    {% endfor %}
+  {% else %}
+    <p>No materials uploaded yet.</p>
+  {% endif %}
+{% endblock %}

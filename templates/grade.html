@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h2 style="color: #2c3e50; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+    {{ grade }} Learners
+  </h2>
+
+  <p style="font-size: 1.2em; color: #34495e; font-family: 'Arial Rounded MT Bold', Arial, sans-serif;">
+    Choose your subjects below to explore tailored study materials and tutoring sessions:
+  </p>
+
+  <ul style="list-style-type: square; padding-left: 20px; font-family: 'Verdana', Geneva, Tahoma, sans-serif; color: #2980b9;">
+    <li style="margin-bottom: 8px; font-weight: 600; font-size: 1.1em; transition: color 0.3s;">
+      <a href="{{ url_for('materials_by_subject', grade=grade, subject='Mathematics') }}" 
+         style="color: #2980b9; text-decoration: none;" 
+         onmouseover="this.style.color='#1abc9c'" 
+         onmouseout="this.style.color='#2980b9'">Mathematics</a>
+    </li>
+    <li style="margin-bottom: 8px; font-weight: 600; font-size: 1.1em; transition: color 0.3s;">
+      <a href="{{ url_for('materials_by_subject', grade=grade, subject='Physical Sciences') }}" 
+         style="color: #2980b9; text-decoration: none;" 
+         onmouseover="this.style.color='#1abc9c'" 
+         onmouseout="this.style.color='#2980b9'">Physical Sciences</a>
+    </li>
+    <li style="margin-bottom: 8px; font-weight: 600; font-size: 1.1em; transition: color 0.3s;">
+      <a href="{{ url_for('materials_by_subject', grade=grade, subject='Life Sciences') }}" 
+         style="color: #2980b9; text-decoration: none;" 
+         onmouseover="this.style.color='#1abc9c'" 
+         onmouseout="this.style.color='#2980b9'">Life Sciences</a>
+    </li>
+    <li style="margin-bottom: 8px; font-weight: 600; font-size: 1.1em; transition: color 0.3s;">
+      <a href="{{ url_for('materials_by_subject', grade=grade, subject='Geography') }}" 
+         style="color: #2980b9; text-decoration: none;" 
+         onmouseover="this.style.color='#1abc9c'" 
+         onmouseout="this.style.color='#2980b9'">Geography</a>
+    </li>
+    <li style="margin-bottom: 8px; font-weight: 600; font-size: 1.1em; transition: color 0.3s;">
+      <a href="{{ url_for('materials_by_subject', grade=grade, subject='Agricultural Sciences') }}" 
+         style="color: #2980b9; text-decoration: none;" 
+         onmouseover="this.style.color='#1abc9c'" 
+         onmouseout="this.style.color='#2980b9'">Agricultural Sciences</a>
+    </li>
+  </ul>
+
+  <p><a href="{{ url_for('materials') }}" style="color: #27ae60; font-weight: bold; font-family: 'Segoe UI', sans-serif;">View all study materials</a></p>
+  <p><a href="{{ url_for('home') }}" style="color: #c0392b; font-weight: bold; font-family: 'Segoe UI', sans-serif;">Back to Home</a></p>
+{% endblock %}

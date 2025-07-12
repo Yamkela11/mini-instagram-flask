@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h2>{{ material.title }}</h2>
+  <p><strong>Uploaded by:</strong> @{{ material.uploader.username }}</p>
+
+  <p><strong>Grade:</strong> {{ material.grade or 'General' }}</p>
+  <p><strong>Subject:</strong> {{ material.subject or 'General' }}</p>
+  <p><strong>Description:</strong> {{ material.description or 'No description provided.' }}</p>
+
+  {% if material.filename.endswith('.pdf') %}
+    <embed src="{{ url_for('static', filename='uploads/' + material.filename) }}" type="application/pdf" width="100%" height="600px" />
+  {% elif material.filename.endswith('.mp4') %}
+    <video width="100%" controls>
+      <source src="{{ url_for('static', filename='uploads/' + material.filename) }}" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+  {% else %}
+    <img src="{{ url_for('static', filename='uploads/' + material.filename) }}" alt="{{ material.title }}" style="max-width: 100%; height: auto;">
+  {% endif %}
+
+  <hr>
+
+  <h3>Comments</h3>
+
+  {% if comments %}
+    <ul>
+      {% for comment in comments %}
+        <li>
+          <strong>@{{ comment.author.username }}</strong> 
+          ({{ comment.timestamp.strftime('%Y-%m-%d %H:%M') }}) -
+          {% if comment.is_positive %}
+            <span style="color:green;">👍</span>
+          {% else %}
+            <span style="color:red;">👎</span>
+          {% endif %}
+          <p>{{ comment.text }}</p>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No comments yet. Be the first to comment!</p>
+  {% endif %}
+
+  {% if current_user.is_authenticated %}
+    <hr>
+    <h4>Add a Comment</h4>
+    <form method="POST" action="{{ url_for('view_material', material_id=material.id) }}">
+      <textarea name="comment" rows="3" required placeholder="Write your comment here..."></textarea><br><br>
+
+      <label>
+        <input type="radio" name="is_positive" value="true" checked> Positive 👍
+      </label>
+      <label style="margin-left: 20px;">
+        <input type="radio" name="is_positive" value="false"> Negative 👎
+      </label><br><br>
+
+      <button type="submit">Submit Comment</button>
+    </form>
+  {% else %}
+    <p><a href="{{ url_for('login') }}">Log in</a> to add a comment.</p>
+  {% endif %}
+
+{% endblock %}
