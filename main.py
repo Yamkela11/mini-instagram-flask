@@ -19,8 +19,8 @@ app.config['UPLOAD_FOLDER'] = 'static/uploads'
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USERNAME'] = 'bhakuyamkela751@gmail.com'  # Gmail used to send emails
-app.config['MAIL_PASSWORD'] = 'anfnsmaugaedjwol'            # 16-character App Password (no spaces)
+app.config['MAIL_USERNAME'] = 'bhakuyamkela751@gmail.com'
+app.config['MAIL_PASSWORD'] = 'anfnsmaugaedjwol'  # App password only (not normal Gmail password)
 
 mail = Mail(app)
 
@@ -108,7 +108,7 @@ def materials_by_subject(grade, subject):
 @login_required
 def upload():
     if not current_user.is_admin:
-        abort(403)  # Restrict access to admin only
+        abort(403)
 
     if request.method == 'POST':
         file = request.files.get('file')
@@ -154,7 +154,7 @@ def book():
         db.session.add(new_booking)
         db.session.commit()
 
-        # ✅ Send email to admin on booking
+        # ✅ Email notification to admin
         msg = Message(
             subject='New Tutoring Booking',
             sender=app.config['MAIL_USERNAME'],
@@ -174,10 +174,11 @@ Log in to the site for more details.
             mail.send(msg)
         except Exception as e:
             print("Email sending failed:", e)
-            flash('Booking saved but failed to send notification email.', 'warning')
+            flash('Booking saved but email notification failed.', 'warning')
 
-        flash('Booking submitted successfully! You will be contacted soon.', 'success')
+        flash('Booking submitted! You will be contacted soon.', 'success')
         return redirect(url_for('home'))
+
     return render_template('book.html')
 
 @app.route('/grade10')
@@ -255,23 +256,18 @@ def view_material(material_id):
 
     return render_template('material_detail.html', material=material, comments=comments)
 
-# ---------- NEW ROUTE: Admin dashboard to view all bookings ----------
 @app.route('/admin_bookings')
 @login_required
 def admin_bookings():
     if not current_user.is_admin:
-        abort(403)  # Forbidden if not admin
-
+        abort(403)
     bookings = Booking.query.order_by(Booking.date.asc()).all()
     return render_template('admin_bookings.html', bookings=bookings)
 
-# ------------------------ MAIN ------------------------
-
-import os
+# ------------------------ RUN ------------------------
 
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
-
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port, debug=False)
